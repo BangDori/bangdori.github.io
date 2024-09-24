@@ -1,0 +1,25 @@
+---
+---
+
+@import 'main
+{%- if jekyll.environment == ' production
+  ' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* append your custom style below */
+
+@media (min-width: 1200px) {
+  .col-xl-9 {
+    flex: 0 0 auto;
+    width: 80%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .col-xl-3 {
+    flex: 0 0 auto;
+    width: 20%;
+  }
+}
