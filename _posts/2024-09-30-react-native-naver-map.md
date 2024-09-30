@@ -3,7 +3,7 @@ title: React Native에서 네이버 지도 연동하기
 description: 네이버 지도 연동이 이렇게 어려운거 였나요
 date: 2024-09-30 21:07:00 +/-TTTT
 categories: [React Native]
-tags: [app, react native, naver map]
+tags: [app, react native, react-native-naver-map]
 image:
   path: assets/img/writing/android_build_error_github.png
 ---
