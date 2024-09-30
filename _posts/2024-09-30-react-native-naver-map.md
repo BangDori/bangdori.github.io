@@ -8,12 +8,6 @@ image:
   path: assets/img/writing/android_build_error_github.png
 ---
 
-<!-- > 세 줄 요약
-> 1. `@gorhom/bottom-sheet` iOS, Android에서 bottom-sheet의 UI가 동일하게 구성되지 않음
-> 2. 높이가 동적으로 적용되어 있기 때문에 발생한 문제였음!
-> 3. `enableDynamicSizing`을 `false`로 설정하기!
-{: .prompt-tip } -->
-
 ## 1. 개요
 
 React Native에서 네이버 지도를 렌더링하기 위해 [react-native-naver-map](https://github.com/mym0404/react-native-naver-map) 라이브러리를 적용하려고 하였는데 적용하는 과정에서 어려움을 느껴 이를 해결하고 나와 같은 어려움을 느끼는 사람들에게 공유하고자 게시물을 작성하게 되었다.
