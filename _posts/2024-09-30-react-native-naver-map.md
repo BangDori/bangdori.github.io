@@ -87,8 +87,6 @@ buildscript {
         minSdkVersion = 23
         compileSdkVersion = 34
         targetSdkVersion = 34
-
-        // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
     }
     repositories {
@@ -178,8 +176,6 @@ buildscript {
         minSdkVersion = 23
         compileSdkVersion = 34
         targetSdkVersion = 34
-
-        // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
     }
     repositories {
@@ -219,8 +215,6 @@ buildscript {
         minSdkVersion = 24 // ✅ 23 -> 24 업그레이드
         compileSdkVersion = 34
         targetSdkVersion = 34 
-
-        // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
     }
     repositories {
@@ -240,8 +234,54 @@ allprojects {
 }
 ```
 
+### 3-3. Execution failed for task ':mj-studio_react-native-naver-map:compileDebugKotlin'.
+
+```shell
+A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+```
+
+해당 에러는 Kotlin 및 Gradle 플러그인의 버전이 호환되지 않아 발생하는 에러이다. 만약 Kotlin 버전이 명시되어 있는 경우라면 Gradle과 호환되는 버전으로 변경하면 되고, Kotlin 버전이 없는 경우 현재 설치된 gradle 버전과 호환되는 Kotlin 버전을 `buildscript`에 명시해 주면 된다.
+
+이때 자신에게 적합한 Kotlin 버전을 찾기 위해서는 [Compatibility Matrix](https://docs.gradle.org/current/userguide/compatibility.html)를 확인해야 하는 데 우선 현재 프로젝트에 설정된 gradle 버전을 확인해야 한다. gradle 버전은 `.gradle` 폴더 내부에서 확인할 수 있다.
+
+![gradle_version](assets/img/writing/gradle_version.png)
+
+그리고 호환성 매트릭스에서 최소 Gradle Version에 맞는 Kotlin version을 적용해 주면 된다.
+
+```gradle
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        buildToolsVersion = "34.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 34
+        targetSdkVersion = 34 
+        ndkVersion = "23.1.7779620"
+        kotlinVersion = '1.8.10' // ✅ 안정적인 버전으로 업데이트
+    }
+    repositories {
+      // ...
+    }
+    dependencies {
+      // ...
+
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion") // ✅ kotlin-gradle-plugin 의존성 명시
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            url "https://repository.map.naver.com/archive/maven"
+        }
+    }
+}
+```
+
 ## 참고
 
 - [react-native-naver-map](https://github.com/mym0404/react-native-naver-map)
 - [Execution failed for task ':app:mergeExtDexDebug'](https://github.com/invertase/react-native-firebase/discussions/7489)
 - [Map SDK 라이브러리 저장소 변경 안내](https://www.ncloud-forums.com/topic/284/)
+- [[IntelliJ] Gradle 버전 확인 및 변경](https://tychejin.tistory.com/388)
