@@ -90,8 +90,6 @@ Github Actions는 웹 프로젝트를 진행할 때 CI/CD 파이프라인을 구
   - 지속적 통합을 Github Actions가 지속적 배포를 Fastlane이 담당하면 되지 않을까?
   - 추후 Github에 완벽 통합하여 release 브랜치에 merge 되었을 때 자동 배포가 적용되도록 한다면 Github에서 완벽하게 제어할 수 있지 않을까? => 🎉 **Github Actions + Fastlane**
 
-다음 시간에는 Fastlane을 적용하여 자동화 배포를 적용해 보자.
-
 ## 참고
 
 - [Publishing to Google Play Store](https://reactnative.dev/docs/signed-apk-android)
