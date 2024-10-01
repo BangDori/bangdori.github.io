@@ -24,6 +24,8 @@ description: >- # used by seo meta and the atom feed
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
 url: "https://bangdori.github.io"
+plugins:
+  - jekyll-seo-tag
 
 github:
   username: bangdori # change to your GitHub username
