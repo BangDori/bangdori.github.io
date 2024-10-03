@@ -102,3 +102,8 @@ jobs:
 
 self-hosted를 테스트한 리포지토리는 아래에 링크로 첨부해 둘 테니 이 글을 보는 사람들에게 도움이 되었으면 좋겟다.
 - [https://github.com/BangDori/self-hosted-test-repo/pull/1](https://github.com/BangDori/self-hosted-test-repo/pull/1)
+
+## 참고
+
+- [Understanding Github Actions](https://docs.github.com/en/actions/about-github-actions/understanding-github-actions)
+- [About self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners)
