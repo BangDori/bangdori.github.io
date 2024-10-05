@@ -20,7 +20,7 @@ image:
 
 ## 2. 문제 원인
 
-![React Native Bottom Sheet](assets/img/writing/bottom_sheet_before.png)
+![React Native Bottom Sheet](assets/img/writing/2/bottom_sheet_before.png)
 _좌 iOS, 우 Android_
 
 동일한 높이의 `snapPoints`를 설정해 두고 렌더링 한 결과 위 이미지와 같이 iOS에서는 예상대로 버튼이 렌더링 되지만 Android에서는 예상과는 다르게 렌더링 되는 문제가 발생하였다.
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 
 코드 자체에서 문제가 있는 것인지 확인해 보았지만, Android 기기에 따라 다르게 렌더링 되도록 작성한 코드가 없었기에 코드상에 문제는 없다고 생각했다. 그렇다면 `@gorhom/bottom-sheet`에서 제공해 주는 바텀 시트가 **동적으로 위치를 설정할 수 있기 때문에 그런 것은 아닐까**하여 확인해 본 결과 아래 이미지와 같이 버튼이 하단에 정상적으로 렌더링 되고 있는 것을 확인할 수 있었다.
 
-![React Native Bottom Sheet](assets/img/writing/android_bottom_sheet.png){: width="360" }
+![React Native Bottom Sheet](assets/img/writing/2/android_bottom_sheet.png){: width="360" }
 _Android Bottom Sheet_
 
 ### 2-1. snapPoints 분석
@@ -137,7 +137,7 @@ function BottomSheet() {
 
 정상적으로 내가 예상하는 바텀 시트가 렌더링이 되는 모습을 확인할 수 있다.
 
-![React Native Bottom Sheet](assets/img/writing/bottom_sheet_after.png)
+![React Native Bottom Sheet](assets/img/writing/2/bottom_sheet_after.png)
 _좌 iOS, 우 Android_
 
 ## 참고
