@@ -5,7 +5,7 @@ date: 2024-09-30 21:07:00 +/-TTTT
 categories: [React Native]
 tags: [app, react native, react-native-naver-map]
 image:
-  path: assets/img/writing/android_build_error_github.png
+  path: assets/img/writing/3/ios_naver_map.png
 ---
 
 ## 1. 개요

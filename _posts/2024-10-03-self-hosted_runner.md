@@ -5,7 +5,7 @@ date: 2024-10-03 12:35:00 +/-TTTT
 categories: [DevOps]
 tags: [github actions, self-hosted]
 image:
-  path: assets/img/writing/github_actions_hosting_flow.png
+  path: assets/img/writing/4/github_actions_hosting_flow.png
 ---
 
 ### 1. 개요
@@ -16,7 +16,7 @@ Github Actions를 사용하다가 빌드 타임이 너무 길어지게 되었고
 
 self-hosted runner는 Github에서 Github Actions의 작업을 실행하기 위해 배포하고 관리하는 시스템이다. 우선 self-hosted runner에 대해 알아보기 이전에 간단하게 Github Actions의 flow에 대해 알아보자.
 
-![github_actions_flow](assets/img/writing/github_actions_flow.png)
+![github_actions_flow](assets/img/writing/4/github_actions_flow.png)
 
 Github Actions가 trigger 되기까지의 과정은 생각보다 단순하다.
 
@@ -29,7 +29,7 @@ Github Actions가 trigger 되기까지의 과정은 생각보다 단순하다.
 
 [About GitHub-hosted runners](https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners)에서 답을 찾을 수 있었다. 우리가 워크플로우에서 실행 환경을 `ubuntu-latest`와 같이 작성해 주면 Github Actions에서는 해당 운영체제에 맞는 호스팅 실행기를 제공해 준다. 그림으로 알아보자.
 
-![github_actions_hosting_flow](assets/img/writing/github_actions_hosting_flow.png)
+![github_actions_hosting_flow](assets/img/writing/4/github_actions_hosting_flow.png)
 
 1. workflow에 설정한 이벤트(push, pull_request 등)에 의해 Github Actions가 trigger 된다.
 2. 트리거가 실행되면 Github는 사용자가 정의한 `runs-on` 키에 따라 워크플로우가 실행될 가상 머신을 선택한다.
@@ -50,19 +50,19 @@ Github Actions가 trigger 되기까지의 과정은 생각보다 단순하다.
 
 self-hosted runner 방식은 어렵지 않다.
 
-![self_hosted_runner_setup_1](assets/img/writing/self_hosted_runner_setup_1.png)
+![self_hosted_runner_setup_1](assets/img/writing/4/self_hosted_runner_setup_1.png)
 
 1. self-hosted runner를 등록하려는 리포지토리의 Settings 탭으로 이동한다.
 2. 좌측 Aside에서 Actions 탭에 Runners로 이동한다.
 3. New self-hosted runner를 클릭한다.
 
-![self_hosted_runner_setup_2](assets/img/writing/self_hosted_runner_setup_2.png)
+![self_hosted_runner_setup_2](assets/img/writing/4/self_hosted_runner_setup_2.png)
 
 이 창에서 자신의 운영체제를 선택하고 아래 Download, Configure에 나온 명령어를 순서대로 자신의 터미널에서 입력한다.
 
 - `./config.sh`를 하면 입력창이 나오는데 여기서 별다른 입력 없이 Enter를 입력하자.
 
-![self_hosted_runner_setup_3](assets/img/writing/self_hosted_runner_setup_3.png)
+![self_hosted_runner_setup_3](assets/img/writing/4/self_hosted_runner_setup_3.png)
 
 그럼 이렇게 self-hosted runner가 정상적으로 등록된 것을 확인할 수 있다. 여기서 주의할 점이 있다.
 
@@ -77,7 +77,7 @@ self-hosted runner 방식은 어렵지 않다.
 
 터미널에서 실행하게 되면 상태가 Offline에서 Idle로 변환된 것을 확인할 수 있다. 그리고 이제 pull_request를 작성하여 확인해 보자.
 
-![self_hosted_runner_setup_4](assets/img/writing/self_hosted_runner_setup_4.png)
+![self_hosted_runner_setup_4](assets/img/writing/4/self_hosted_runner_setup_4.png)
 
 터미널에서는 job의 실행 과정이 표기되며 Github Actions 탭에서는 워크플로우의 결과를 확인할 수 있다. 워크플로우 파일은 아래와 같다.
 
