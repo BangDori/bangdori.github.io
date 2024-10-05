@@ -3,9 +3,9 @@ title: Zustand persist로 지속적인 사용자 경험 제공하기
 description: zustand랑 조금 더 친해져보자
 date: 2024-10-05 21:24:00 +/-TTTT
 categories: [Zustand]
-tags: []
+tags: [React, Zustand, 상태 관리, localStorage]
 image:
-  path: assets/img/thumbnail/
+  path: assets/img/thumbnail/zustand.png
 ---
 
 ## 1. 개요
