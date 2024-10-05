@@ -2,7 +2,7 @@
 title: Internal Testing으로 팀원들과 앱 공유하기
 description: 현재 개발 중인 앱을 내 휴대폰에서 확인할 수 있다고?
 date: 2024-09-25 15:53:00 +/-TTTT
-categories: [React Native, React Native]
+categories: [React Native]
 tags: [app, react native, deployment, internal testing]
 image:
   path: assets/img/thumbnail/internal_testing.png
