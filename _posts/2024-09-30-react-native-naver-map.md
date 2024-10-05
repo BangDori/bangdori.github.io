@@ -53,7 +53,7 @@ React Native에서 네이버 지도를 렌더링하기 위해 [react-native-nave
 </plist>
 ```
 
-![iOS Naver Map](assets/img/writing/ios_naver_map.png){: width="240" }
+![iOS Naver Map](assets/img/writing/3/ios_naver_map.png){: width="240" }
 _iOS Naver Map_
 
 이렇게 2번의 단계만 거치면 iOS는 네이버 지도가 화면에 잘 표시된다. 그럼, 이제 문제의 Android 알아보자!
@@ -133,7 +133,7 @@ allprojects {
 </manifest>
 ```
 
-![Android Naver Map](assets/img/writing/android_naver_map.png){: width="240" }
+![Android Naver Map](assets/img/writing/3/android_naver_map.png){: width="240" }
 _Android Naver Map_
 
 Android도 생각보다 되게 간단하다!
@@ -198,7 +198,7 @@ allprojects {
 
 해당 이슈를 해결하고 나와 동일한 문제를 겪고 있는 사람을 [이슈](https://github.com/mym0404/react-native-naver-map/issues/104)에서 마주해서 댓글로 도움을 드렸다!
 
-![Android Build Error](assets/img/writing/android_build_error_github.png)
+![Android Build Error](assets/img/writing/3/android_build_error_github.png)
 
 뿌듯 😄
 
@@ -244,7 +244,7 @@ A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCom
 
 이때 자신에게 적합한 Kotlin 버전을 찾기 위해서는 [Compatibility Matrix](https://docs.gradle.org/current/userguide/compatibility.html)를 확인해야 하는 데 우선 현재 프로젝트에 설정된 gradle 버전을 확인해야 한다. gradle 버전은 `.gradle` 폴더 내부에서 확인할 수 있다.
 
-![gradle_version](assets/img/writing/gradle_version.png)
+![gradle_version](assets/img/writing/3/gradle_version.png)
 
 그리고 호환성 매트릭스에서 최소 Gradle Version에 맞는 Kotlin version을 적용해 주면 된다.
 
