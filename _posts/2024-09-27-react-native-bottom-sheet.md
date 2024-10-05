@@ -2,7 +2,7 @@
 title: React Native에서 사용되는 바텀 시트의 높이를 고정해 보자
 description: 못말리는 짱구도 아니고 못말리는 바텀 시트
 date: 2024-09-27 01:49:00 +/-TTTT
-categories: [React Native]
+categories: [Frontend, React Native]
 tags: [app, react native, react-native-bottom-sheet]
 image:
   path: assets/img/thumbnail/bottom_sheet.png
