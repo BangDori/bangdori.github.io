@@ -1,8 +1,8 @@
 ---
-title: Intenral Testing으로 팀원들과 앱 공유하기
+title: Internal Testing으로 팀원들과 앱 공유하기
 description: 현재 개발 중인 앱을 내 휴대폰에서 확인할 수 있다고?
 date: 2024-09-25 15:53:00 +/-TTTT
-categories: [React Native]
+categories: [React Native, React Native]
 tags: [app, react native, deployment, internal testing]
 image:
   path: assets/img/thumbnail/internal_testing.png
@@ -41,7 +41,7 @@ Internal Testing이란 내부 테스트로 팀 내에서 내부적으로 팀원�
 
 ### 2-2. Android Deploy Process
 
-![Android Deploy Process](assets/img/writing/ios_deploy_process.png){: width="640" }
+![Android Deploy Process](assets/img/writing/1/android_deploy_process.png){: width="640" }
 _Android Deploy Process_
 
 1. Create KeyStore and Setup Release signing
@@ -53,7 +53,7 @@ _Android Deploy Process_
 
 ### 2-3. iOS Deploy Process
 
-![iOS Deploy Process](assets/img/writing/ios_deploy_process.png){: width="640" }
+![iOS Deploy Process](assets/img/writing/1/ios_deploy_process.png){: width="640" }
 _iOS Deploy Process_
 
 1. Connect AppStore and Signing
