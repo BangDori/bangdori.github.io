@@ -8,11 +8,11 @@ image:
   path: assets/img/writing/4/github_actions_hosting_flow.png
 ---
 
-### 1. 개요
+## 1. 개요
 
 Github Actions를 사용하다가 빌드 타임이 너무 길어지게 되었고 Github Server에서 제공해 주는 호스팅 실행기를 사용하다가는 월간 무료 제공 시간을 다 사용해 버릴 것 같아서 self-hosted runner 방식으로 변경하게 되었는데 이 과정에서 알게 된 지식을 공유하고자 글을 작성하게 되었다.
 
-### 2. About Github Actions
+## 2. About Github Actions
 
 self-hosted runner는 Github에서 Github Actions의 작업을 실행하기 위해 배포하고 관리하는 시스템이다. 우선 self-hosted runner에 대해 알아보기 이전에 간단하게 Github Actions의 flow에 대해 알아보자.
 
@@ -46,7 +46,7 @@ Github Actions가 trigger 되기까지의 과정은 생각보다 단순하다.
 
 이제 이 그림에서 우리가 주목할 부분은 self-hosted runner 방식으로 환경을 설정하여 나의 로컬 서버에서 workflow를 실행하는 것이다.
 
-### 3. Setup self-hosted runner
+## 3. Setup self-hosted runner
 
 self-hosted runner 방식은 어렵지 않다.
 
