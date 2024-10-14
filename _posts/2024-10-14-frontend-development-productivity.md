@@ -20,7 +20,7 @@ Github에서 pull request를 작성하면 위 이미지와 같이 assignees와 r
 
 우선 [Auto Assign Action](https://github.com/marketplace/actions/auto-assign-action)은 Github Marketplace에서 손쉽게 찾을 수 있는데, 이 도구를 사용하면 정말 쉽게 담당자와 리뷰어를 자동으로 할당할 수 있게 도와줍니다. 그리고 바로 해당 Action에 대한 사용법으로 넘어가 보겠습니다.
 
-### 1. pr-auto-assign.yml
+### 2-1. pr-auto-assign.yml
 
 .github/workflow 디렉터리 내부에서 pr-auto-assign.yml을 생성합니다.
 
@@ -50,7 +50,7 @@ jobs:
 
 위 작성된 pr-auto-assign.yml 워크플로우는 pr가 생성되었을 때와 draft 상태에서 pr로 변경될 때 실행됩니다. 그리고 한 가지 중요한 점이 있는데 permissions에서 pull-requests 옵션을 write로 설정해야 합니다. pull-requests 옵션을 write로 설정해 주지 않으면 해당 워크플로우가 PR 내용에 대한 수정 작업을 진행할 수 없어서 리뷰어와 담당자가 정상적으로 추가되지 않을 수 있습니다.
 
-### 2. auto_assign_config.yml 파일 생성
+### 2-2. auto_assign_config.yml 파일 생성
 
 ./github 디렉터리 내부에서 앞서 작성한 워크플로우의 configuration-path의 파일명을 작성합니다. 그리고 해당 설정 파일에서는 리뷰어와 담당자를 어떻게 할당할 것인지 설정하는 파일인데 간단하게 `addReviewers`와 `addAssignees` 설정만 해주면 됩니다.
 
@@ -70,7 +70,7 @@ numberOfReviewers: 0 # 해당 라인을 추가해주지 않으면 리뷰어가 1
 
 ![reviewers_and_assignees](assets/img/writing/6/reviewers_and_assignees.png){: width="360" }
 
-## 2. AWS Amplify
+## 3. AWS Amplify
 
 전통적으로 애플리케이션 개발에는 백엔드 인프라 프로비저닝, 데이터베이스 관리, 사용자 인증, 프론트엔드 디자인 등의 많은 작업이 포함됩니다. 이렇게나 많은 작업으로 인해 개발 주기가 길어지고, 유지 관리 비용이 증가하며 개발자의 학습 곡선이 가파른 경우가 많았습니다.
 
@@ -86,7 +86,7 @@ aws amplify hosting 랜딩 페이지를 살펴보면 Key features에서 5가지�
 
 오늘은 이 5가지의 기능 중 2번 Pull request previews에 대해 알아보겠습니다.
 
-### 2-1. Pull request previews
+### 3-1. Pull request previews
 
 [Web previews for pull requests](https://docs.aws.amazon.com/amplify/latest/userguide/pr-previews.html)의 공식 문서를 살펴보면 다음과 같이 소개하고 있습니다.
 
@@ -115,7 +115,7 @@ PR의 변경 사항을 미리 볼 수 있다니 정말 생각만 해도 두근�
 
 그리고 PR을 작성하면 다른 github actions가 좀 많긴 한데, 무시해 주세요..! AWS Amplify Console Web Preview만 확인해 보시면 정상적으로 Pass가 되고 댓글로 미리보기 preview url이 추가되는 것을 확인할 수 있습니다.
 
-### 2-2. Amplify가 동작하지 않는다면
+### 3-2. Amplify가 동작하지 않는다면
 
 만약 위 이미지와 달리 AWS Amplify Console Web Preview가 표시되지 않는다면 AWS Amplify 빌드 에러일 문제가 있습니다. 문제의 원인을 파악하는 가장 빠른 방법은 AWS Amplify의 자신이 추가한 앱으로 이동하여 빌드 로그를 확인하면 됩니다!
 
