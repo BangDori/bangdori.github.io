@@ -37,6 +37,7 @@ React Native에서 네이버 지도를 렌더링하기 위해 [react-native-nave
 
 단순 로컬에서 테스트하기 위한 목적이라면 `info.plist`에 권한 요청에 대한 설명을 작성해 줄 필요가 없지만, 앱 스토어의 심사를 받고 정식 출시를 해야 한다면 해당 권한을 사용하는 목적을 반드시 기재해야 한다.
 
+{% raw %}
 ```md
 <plist version="1.0">
 <dict>
@@ -52,6 +53,7 @@ React Native에서 네이버 지도를 렌더링하기 위해 [react-native-nave
 </dict>
 </plist>
 ```
+{% endraw %}
 
 ![iOS Naver Map](assets/img/writing/3/ios_naver_map.png){: width="240" }
 _iOS Naver Map_
