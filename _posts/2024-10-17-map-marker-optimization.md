@@ -2,7 +2,7 @@
 title: React Native 지도 및 마커 최적화하기
 description: 클러스터링을 이용하여 마커 렌더링 시간을 개선해보자
 date: 2024-10-17 22:45:00 +/-TTTT
-categories: [Frontend, Optimization]
+categories: [Frontend, Map]
 tags: [react native, naver maps, google map, markers, clustering, optimization]
 image:
   path: assets/img/writing/7/extent_clustering_markers.png
