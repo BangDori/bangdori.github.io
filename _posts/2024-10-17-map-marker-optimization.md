@@ -6,6 +6,9 @@ categories: [Frontend, Map]
 tags: [react native, naver maps, google map, markers, clustering, optimization]
 image:
   path: assets/img/writing/7/extent_clustering_markers.png
+sitemap: 
+    changefreq : daily
+    priority : 0.8
 ---
 
 ## 1. 개요

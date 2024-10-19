@@ -6,6 +6,9 @@ categories: [Frontend, React Native]
 tags: [app, react native, deployment, internal testing]
 image:
   path: assets/img/thumbnail/internal_testing.png
+sitemap: 
+    changefreq : daily
+    priority : 0.8
 ---
 
 ## 1. 개요

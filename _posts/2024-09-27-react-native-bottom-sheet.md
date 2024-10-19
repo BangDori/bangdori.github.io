@@ -6,6 +6,9 @@ categories: [Frontend, React Native]
 tags: [app, react native, react-native-bottom-sheet]
 image:
   path: assets/img/thumbnail/bottom_sheet.png
+sitemap: 
+    changefreq : daily
+    priority : 0.8
 ---
 
 > 세 줄 요약

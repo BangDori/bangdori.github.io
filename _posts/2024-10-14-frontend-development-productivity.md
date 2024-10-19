@@ -6,6 +6,9 @@ categories: [DevOps]
 tags: [frontend, 개발 생산성, auto assign, amplify, pull request]
 image:
   path: assets/img/thumbnail/nextjs_and_amplify.png
+sitemap: 
+    changefreq : daily
+    priority : 0.8
 ---
 
 ## 1. 개요

@@ -6,6 +6,9 @@ categories: [DevOps]
 tags: [github actions, self-hosted]
 image:
   path: assets/img/writing/4/github_actions_hosting_flow.png
+sitemap: 
+    changefreq : daily
+    priority : 0.8
 ---
 
 ## 1. 개요

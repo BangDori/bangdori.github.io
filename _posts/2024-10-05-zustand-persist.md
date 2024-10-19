@@ -6,6 +6,9 @@ categories: [Frontend, Zustand]
 tags: [React, Zustand, 상태 관리, localStorage]
 image:
   path: assets/img/thumbnail/zustand.png
+sitemap: 
+    changefreq : daily
+    priority : 0.8
 ---
 
 ## 1. 개요

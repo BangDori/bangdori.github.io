@@ -6,6 +6,9 @@ categories: [Frontend, Map]
 tags: [app, react native, react-native-naver-map]
 image:
   path: assets/img/writing/3/ios_naver_map.png
+sitemap: 
+    changefreq : daily
+    priority : 0.8
 ---
 
 ## 1. 개요
