@@ -138,7 +138,7 @@ const TMAP_MAP_IOS_STORE = 'https://itunes.apple.com/app/id431589174?mt=8'; // T
 
 근데 만약 iOS Platform을 타겟으로 한다면 굳이 안드로이드에서도 동작하도록 앱 링크를 수정해 줄 필요는 없을 것 같다.
 
-## 3. Linking 연동하기
+## 3. 외부 앱 열기
 
 Linking을 이용해서 외부 앱을 연결하는 방법은 정말 쉽다. 2가지의 기능만 숙지하고 들어가자.
 
