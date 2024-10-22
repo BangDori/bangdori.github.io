@@ -8,7 +8,7 @@ image:
   path: assets/img/writing/3/ios_naver_map.png
 sitemap: 
     changefreq : daily
-    priority : 0.8
+    priority : 0.5
 ---
 
 ## 1. 개요
