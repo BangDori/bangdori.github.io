@@ -42,15 +42,36 @@ sitemap:
 > - The login option does not collect interactions with the app for advertising purposes without consent. 
 {: .prompt-warning }
 
-사실 해당 리젝을 해결하기 위해 많은 시간을 소요했는데 해당 리젝은 **다른 소셜 로그인 서비스를 사용한다면 계정에서 이메일을 가릴 수 있는 소셜 로그인을 추가**하라는 의미인데 조금 내려서 내용을 더 살펴보면 이런 문장을 확인할 수 있습니다.
+Appe의 App Store 심사 가이드라인 4.8은 주로 앱이 타사 로그인 서비스(Facebook, Google, Twitter, Kakaotalk 등)을 사용하는데, 위와 같은 동등한 로그인 옵션을 제공하지 않기에 발생하는 리젝 사유입니다. 사실 위 리젝 사유는 조금만 자세히 살펴보면 리뷰를 살펴보면 하단에 아래와 같은 문장을 확인할 수 있습니다.
 
 - Note that Sign in with Apple meets the requirements specified in [guideline 4.8](https://developer.apple.com/app-store/review/guidelines/#login-services).
 
-Apple로 로그인 기능은 가이드라인 4.8에 명시된 요구 사항을 충족하기에 Apple 로그인을 적용하면 해결할 수 있습니다. 저는 React Native를 사용하고 있어, [react-native-apple-authentication](https://github.com/invertase/react-native-apple-authentication) 라이브러리를 이용하여 Apple 로그인을 적용하였습니다. 해당 라이브러리를 적용할 때는 아래의 요구 사항을 충족해야 합니다.
+즉 애플 로그인만 추가하면 충족할 수 있는 리젝 사유입니다. 
 
-- React Native version 0.60 or higher.
-- Xcode version 11 or higher.
-- iOS version 13 or higher.
+위 리젝 사유는 앱 심사에서 흔히 리젝되는 사유 중 하나인데요. 항상 모든 앱 심사에서 요구되는 가이드라인은 아닙니다. 그렇다면 위 리젝 사유가 발생하지 않는 경우에는 어떤 케이스가 있을까요?
+
+### 3-1. 리젝 사유가 발생하지 않는 경우
+
+1. "Sign in with Apple"을 이미 제공하는 경우
+2. 타사 로그인 서비스를 사용하지 않는 경우
+3. 로그인 기능이 필요 없는 경우
+
+### 3-2. 리젝 사유가 발생하는 경우
+
+1. 타사 로그인 서비스만 제공하고 "Sign in with Apple"을 제공하지 않는 경우
+2. "Sign in with Apple"을 동등한 수준으로 제공하지 않는 경우
+  - 로그인 화면에서 "Sign in with Apple" 버튼이 다른 로그인 옵션보다 눈에 띄지 않게 배치되거나, 크기나 디자인이 일관되지 않은 경우입니다.
+3. 사용자 데이터 수집 방침이 가이드라인을 준수하지 않는 경우
+  - 로그인 과정에서 사용자의 이름과 이메일 주소 외에 추가적인 개인정보를 수집하거나, 이메일 주소를 비공개로 유지할 수 있는 옵션을 제공하지 않을 때입니다.
+  - 하지만 이 케이스의 경우에는 **추가적인 개인정보 수집에 대한 사유를 명확하게 작성해주면(설득하면) 통과되는 것 같습니다.**
+4. 로그인 없이 앱의 핵심 기능을 사용할 수 없는 경우
+  - Apple은 사용자가 로그인 없이도 앱의 기본 기능을 사용할 수 있도록 권장하며, 로그인 필수인 경우 가이드라인에 따라야 합니다.
+
+## 4. 마치며
+
+앱스토어에 앱을 제출할 때 만약 소셜 로그인 서비스가 포함되어 있다면 반드시 애플 로그인을 추가하자!
+
+만약 소셜 로그인을 추가하는데 애플 로그인을 추가하지 않는다면 앱 스토어 심사에서 리젝될 것이고, 기존에 만들어두었던 회원가입 플로우가 꼬여서 애플 로그인을 추가하는 과정이 굉장히 고통스러워질 수 있다...
 
 ## 참고
 
