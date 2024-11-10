@@ -1,13 +1,17 @@
 ---
 title: App Store 심사 Reject 사유 해결하기
-description: 앱 스토어에 제출할 땐 애플 로그인을 반드시 추가하자
-date: 2024-11-07 00:19:00 +/-TTTT
+description: 앱스토어에 소셜 로그인이 포함된 앱을 제출할 때에는 애플 로그인을 미리 추가하자!
+date: 2024-11-10 21:42:00 +/-TTTT
 categories: [React Native, Distribution]
 tags: [app store, distribution, reject]
+image:
+  path: assets/img/thumbnail/appstore_review.png
 sitemap:
   changefreq: daily
   priority: 0.5
 ---
+
+![alt text](assets/img/thumbnail/appstore_review.png)
 
 ## 1. 개요
 
