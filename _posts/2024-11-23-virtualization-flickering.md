@@ -123,7 +123,7 @@ React의 key가 추가된 시점부터는 React는 key를 이용해서 비교를
     <video controls="" width="240" height="400" muted="" autoplay="">
       <source src="https://github.com/BangDori/bangdori.github.io/raw/main/assets/img/writing/11/virtualized_mount.mp4" type="video/mp4">
     </video>
-    <img src="assets/img/writing/11/virtualized_list.png" width="480" />
+    <img src="assets/img/writing/11/virtualized_list.png" width="480" alt='virtualized list image' />
   </div>
   <p>실제로 현재 화면에 보이는 아이템들은 mount되며, 화면에 보여지지 않는 이전 데이터들은 unmounted되는 것을 확인할 수 있습니다</p>
 </details>
@@ -164,3 +164,4 @@ React Native의 FlatList는 대용량 데이터를 효율적으로 처리하기 
 - [재조정 (Reconciliation)](https://ko.legacy.reactjs.org/docs/reconciliation.html)
 - [Preserving and Resetting State](https://react.dev/learn/preserving-and-resetting-state)
 - [Reacting to Input with State](https://react.dev/learn/reacting-to-input-with-state)
+- [Virtual Scroll - 가상 스크롤 구현](https://pepperminttt.tistory.com/56)
