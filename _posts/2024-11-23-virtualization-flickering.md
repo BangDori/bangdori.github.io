@@ -40,6 +40,48 @@ React Native에서 대용량 데이터를 스크롤러블하게 렌더링하기 
 - key 값에 중복이 발생할 수 있다.
 - 빠른 속도로 스크롤링한다.
 
+{% raw %}
+```tsx
+import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { useGetTestData } from './useGetTestData';
+
+export function List() {
+  const { data } = useGetTestData();
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        /**
+         * 🚨 keyExtractor에서 Item들의 key값이 중복될 수 있도록 임의 수정
+         */
+        keyExtractor={(item) => (Math.random() <= 0.1 ? '1' : String(item.id))}
+        renderItem={({ item }) => <Item id={item.id} />}
+        // ...
+      />
+    </View>
+  );
+}
+
+function Item({ id }: { id: number }) {
+  return (
+    <View style={styles.itemView}>
+      <Image source={{ uri: 'https://picsum.photos/200' }} width={128} height={128} />
+      <View style={styles.textView}>
+        <Text style={styles.title}>
+          제목: hello world - {id}
+        </Text>
+        <Text style={styles.description}>
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry
+        </Text>
+      </View>
+    </View>
+  );
+};
+```
+{% endraw %}
+
 <div align="center">
   <video controls="" width="240" height="400" muted="" autoplay="">
     <source src="https://github.com/BangDori/bangdori.github.io/raw/main/assets/img/writing/11/flickering_issue.mp4" type="video/mp4">
@@ -96,7 +138,30 @@ React는 두 트리에서 `third`와 `first`를 먼저 비교하고, `first`와 
 
 React의 key가 추가된 시점부터는 React는 key를 이용해서 비교를 진행하기에 `"3"` key를 가진 엘리먼트만 새로 추가되었다는 사실을 알 수 있습니다. 이렇듯이 React의 key 속성은 리스트 비교 과정에서 **비효율적인 DOM 업데이트를 방지하고 성능을 최적화하는 데 중요한 역할**을 합니다.
 
-그렇다면 고유한 key 값을 적용하여 React가 효율적으로 DOM을 비교하고 업데이트할 수 있도록 서버에서 전달해 주는 데이터의 고유 id 값을 적용하여 다시 확인해 보겠습니다. (서버 역할을 수행하도록 하기 위해 [MSW](https://mswjs.io/)를 이용하여 네트워크 요청을 가로채도록 하였습니다.)
+그렇다면 React가 효율적으로 DOM을 비교하고 업데이트할 수 있도록 서버에서 전달해 주는 데이터의 고유 id 값을 적용하여 다시 확인해 보겠습니다.
+
+{% raw %}
+```tsx
+import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { useGetTestData } from './useGetTestData';
+
+export function List() {
+  const { data } = useGetTestData();
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        // ✅ 서버에서 전달해주는 고유 id로 key 값을 저장
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => <Item id={item.id} />}
+        // ...
+      />
+    </View>
+  );
+}
+```
+{% endraw %}
 
 <div align="center">
   <video controls="" width="240" height="400" muted="" autoplay="">
