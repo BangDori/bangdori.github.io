@@ -119,7 +119,7 @@ React의 key가 추가된 시점부터는 React는 key를 이용해서 비교를
   <summary><strong>React Native에서 시각적으로 확인하는 가상화</strong></summary>
   <div align="center">
     <video controls="" width="240" height="400" muted="" autoplay="">
-      <source src="https://github.com/BangDori/bangdori.github.io/raw/main/assets/img/writing/11/virtualized_mount.mp4" type="video/mp4">
+      <source src="https://github.com/BangDori/bangdori.github.io/raw/main/assets/img/writing/11/virtualized_mounted.mp4" type="video/mp4">
     </video>
     <img src="assets/img/writing/11/virtualized_list.png" width="480" alt='virtualized list image' />
   </div>
