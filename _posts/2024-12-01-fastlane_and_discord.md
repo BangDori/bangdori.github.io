@@ -1,6 +1,6 @@
 ---
 title: React Native Fastlane Discord 알림 연동하기
-date: 2024-11-30 15:43:00 +/-TTTT
+date: 2024-12-01 12:27:00 +/-TTTT
 categories: [DevOps]
 tags: [app, react native, deployment, fastlane, notifier, discord]
 image:
