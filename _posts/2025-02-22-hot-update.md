@@ -1,5 +1,5 @@
 ---
-title: CodePush의 대안 및 인앱 업데이트 프로세스 자동화
+title: React Native 인앱 업데이트 적용기
 date: 2025-02-22 23:22:00 +/-TTTT
 categories: [Frontend, React Native]
 tags: [code push, aws s3, In-app updates, hot update]
@@ -13,7 +13,8 @@ sitemap:
 > 목차
 > 1. 개요
 > 2. CodePush의 대안
-> 3. react-native-ota-hot-update의 문제점 및 개선 방안
+> 3. React Native HotUpdate가 인앱 업데이트를 하는 방법
+> 4. 버전 관리 전략과 자동화 파이프라인 구축
 {: .prompt-info }
 
 ## 1. 개요
@@ -54,11 +55,11 @@ CodePush의 대안으로 무료 튤부터 무료 툴까지 많은 도구가 있�
 
 #### Case 1. CodePush Standalone
 
-CodePush Sever는 사용자가 자체 호스팅 환경에서 React Native Application에 대한 OTA 업데이트 배포 및 관리를 할 수 있도록 제공해주는 서버입니다.
+CodePush Sever는 사용자가 자체 호스팅 환경에서 React Native (이하 RN) Application에 대한 OTA 업데이트 배포 및 관리를 할 수 있도록 제공해주는 서버입니다.
 
-> OTA 업데이트
+> OTA Update
 > 
-> OTA는 Over the air의 약자로서 새로운 소프트웨어, 펌웨어, 설정 등의 임베디드 시스템을 무선으로 업데이트 하기 위한 방식 (참고: [https://en.wikipedia.org/wiki/Over-the-air_update](https://en.wikipedia.org/wiki/Over-the-air_update))
+> OTA는 Over the air의 약자로서 새로운 소프트웨어, 펌웨어, 설정 등의 임베디드 시스템을 무선으로 업데이트 하기 위한 방식으로 모바일의 관점에서는 스토어를 통하지 않고 업데이트 하는 것을 의미 (참고: [https://en.wikipedia.org/wiki/Over-the-air_update](https://en.wikipedia.org/wiki/Over-the-air_update))
 
 CodePush를 기반으로 하기 때문에 기존에 신뢰도가 높다는 장점이 있지만, [공식 문서](https://github.com/microsoft/code-push-server/blob/main/api/README.md)에서 언급되어 있듯 CodePush Server를 적용하기 위해서는 HTTPS 설정부터 Azure Blob Storage까지 추가적인 인프라 리소스가 발생하기 때문에 소규모의 팀 보다는 배포 및 관리를 담당하는 팀이 있는 경우에 적합하다고 생각되어 저희 팀에서는 보류하였습니다.
 
@@ -66,11 +67,11 @@ CodePush를 기반으로 하기 때문에 기존에 신뢰도가 높다는 장�
 
 Expo 팀에서 호스팅 서비스로 EAS Update는 `expo-updates` 라이브러리를 사용하여 프로젝트에 대한 업데이트를 제공합니다.
 
-현재 React Native 공식 문서에서도 Expo를 권장하고 있듯이, Expo는 강력한 생태계를 가지고 있습니다. 또한 추가적인 서버 구축 없이 관리현 서비스를 제공하고 있기 때문에 Expo Framework를 사용하고 있다면 더할 나위 없이 좋은 대안이라고 생각합니다.
+현재 RN 공식 문서에서도 Expo를 권장하고 있듯이, Expo는 강력한 생태계를 가지고 있습니다. 또한 추가적인 서버 구축 없이 관리현 서비스를 제공하고 있기 때문에 Expo Framework를 사용하고 있다면 더할 나위 없이 좋은 대안이라고 생각합니다.
 
-하지만, 저희 팀은 Bare React Native로 프로젝트를 구성하였기 때문에 Expo로의 전환 과정에서 발생하는 개발 비용에 대한 부담을 느껴 보류하였습니다.
+하지만, 저희 팀은 Bare RN로 프로젝트를 구성하였기 때문에 Expo로의 전환 과정에서 발생하는 개발 비용에 대한 부담을 느껴 보류하였습니다.
 
-#### Case 3. react-native-ota-hot-update
+#### Case 3. React Native HotUpdate
 
 [Levi](https://github.com/vantuan88291)가 만든 라이브러리로 NativeModules의 OtaHotUpdate를 기반으로 동작하는 라이브러리입니다.
 
@@ -79,38 +80,82 @@ Expo 팀에서 호스팅 서비스로 EAS Update는 `expo-updates` 라이브러�
 ![스토리지를 사용한 인앱 업데이트 플로우](assets/img/writing/14/in_app_update_using_storage.png){: width="480" }
 _외부 저장소를 사용한 인앱 업데이트 플로우_
 
-해당 라이브러리는 React Native에서 제공하는 NativeModules 기반의 업데이트 방식으로 높은 신뢰성을 제공하며, 추가적인 인프라 리소스가 발생하지 않는 장점이 있습니다. 특히, 앱 프론트엔드 개발을 혼자서 진행하는 상황에서는 간편한 설정과 손쉬운 통합 덕분에 초기 환경 구성에 소요되는 시간과 노력을 크게 절감할 수 있어, 매우 매력적인 선택지라 느껴 저희 팀에서는 해당 라이브러리를 채택하게 되었습니다.
+해당 라이브러리는 RN에서 제공하는 NativeModules 기반의 업데이트 방식으로 높은 신뢰성을 제공하며, 추가적인 인프라 리소스가 발생하지 않는 장점이 있습니다. 특히, 앱 프론트엔드 개발을 혼자서 진행하는 상황에서는 간편한 설정과 손쉬운 통합 덕분에 초기 환경 구성에 소요되는 시간과 노력을 크게 절감할 수 있어, 매우 매력적인 선택지라 느껴 저희 팀에서는 해당 라이브러리를 채택하게 되었습니다.
 
-## 3. react-native-ota-hot-update의 문제점 및 개선 방안
+## 3. React Native HotUpdate가 인앱 업데이트를 하는 방법
 
-[react-native-ota-hot-update](https://github.com/vantuan88291/react-native-ota-hot-update) 라이브러리를 적용하면서, 간편한 설정을 통해 빠르게 인앱 업데이트를 구축할 수 있었던 만큼 다음의 사항들을 고려해야 했습니다.
+RN HotUpdate는 기존의 앱 스토어 업데이트 방식과 달리, 외부 저장소에서 최신 버전의 JS 번들을 관리하고, 앱 내부에서 이를 다운로드 받아 즉시 업데이트를 적용하는 인앱 업데이트 메커니즘을 제공합니다.
 
-1. 버전 관리의 복잡성
-2. 스토어의 앱을 업데이트하는 방식이 아니기 때문에 항상 최신 버전을 보장하지 못함
+![Inapp Update diagram](assets/img/writing/14/inapp_update_diagram.png){: width="480" }
+_인앱 업데이트 플로우차트_
 
-이러한 문제점들을 보완하기 위해, 저희 팀은 두 가지 주요 개선 방안을 도입했습니다. 하위 섹션에서 각 개선 방안의 구체적은 적용 방법과 그 결과를 상세히 설명하겠습니다.
+RN HotUpdate의 업데이트 과정은 다음과 같습니다.
 
-### 3-1. 버전 관리 정책 및 프로세스 자동화
+1. **버전 확인**: 앱 실행 시, 외부 저장소에 등록된 최신 버전 정보를 가져와 현재 앱 버전과 비교
+2. **번들 다운로드**: 최신 버전이 존재할 경우, 해당 버전의 JS 번들과 Assets 파일들을 다운로드
+3. **번들 설치 및 적용**: 다운로드가 완료되면, RN의 NativeModules 내의 OtaHotUpdate 메서드를 통해 새 번들을 설정하고, 앱을 재시작하여 업데이트를 적용
 
-우선 외부 저장소를 통해 버저닝을 관리하는 경우 크게 2가지의 버전을 관리해주어야 합니다.
+RN HotUpdate를 사용하면서 간편한 설정 및 인앱 업데이트의 초기 구조를 잡을 수 있었습니다. 하지만 간편해진 만큼 더 많은 것들을 고려해야 했습니다.
 
-1. Script 자바스크립트가 변경되는 경우 (bundleVersion)
-2. Android/iOS 네이티브가 변경되는 경우 (*UpdateVersion)
+1. Native가 변경되는 경우
+2. 버전 관리의 복잡성
+3. 스토어의 앱을 업데이트하는 방식이 아니기에 항상 최신 버전을 보장하지 못함
 
+이러한 문제점들을 보안하기 위해 저희 팀은 두 가지의 주요 개선 방안을 도입했습니다.
 
+### 4. 버전 관리 전략과 자동화 파이프라인 구축
 
+인앱 업데이트를 안정적으로 운영하기 위해, 먼저 버전 관리 전략을 명확히 정의할 필요가 있었습니다. 특히, 네이티브 코드 업데이트와 자바스크립트 번들 업데이트를 구분하여 관리해야 했습니다.
 
-기존의 버전 관리 방식에서 발생하는 문제점
-개선을 위한 접근 방법
+### 4-1. 버전 관리 전략
 
-### 3-2. 최신 버전 보장 한계
-스토어 업데이트 방식과의 차이로 인해 발생하는 최신 버전 보장 문제
-해결 방안 및 대안
+RN에서는 네이티브 코드(iOS, Android)와 자바스크립트 번들(JS Bundle)의 버전을 다르게 관리합니다. 만약 네이티브 코드가 변경된 경우, 기존 JS 번들과의 호환성이 깨질 위험이 있기 때문에, 이를 구분하는 명확한 버전 관리 체계가 필요했습니다.
 
-### 3-3. 적용 사례 및 개선 결과
-실제 프로젝트에 적용한 개선 방법
-개선 후의 성능 및 안정성 평가
+이를 해결하기 위해, 저희 팀에서는 다음과 같은 버전 관리 규칙을 도입했습니다.
 
-간편한 설정
+1. 네이티브 버전과 JS 번들 버전을 분리하여 관리
+  - `bundleVersion`은 JS 번들이 변경되는 경우 증가 (ex. 100)
+  - `nativeVersion`은 네이티브 android/ios 내부 모듈이 변경되는 경우 현재 작업중인 버전으로 설정 (ex. 1.1.2)
+2. 서버에서 제공하는 버저닝 정보 파일을 통해 업데이트 가능 여부를 판단
+  - 앱이 실행될 때, 외부 저장소에서 읽어 온 JSON의 `nativeVersion`과 `bundleVersion`을 조회하여 최신 버전인지 확인
 
-앞서 설명했던 것 처럼 OTA Update는 간편한 설정을 통해 사용자에게
+- 그 외 updatedAt과 appVersion은 업데이트 일시 및 업데이트 당시 버전을 기록하기 위해 추가
+
+```json
+{
+  "updatedAt": "2025-02-24T17:09:26Z",
+  "appVersion": "1.6.0",
+  "bundleVersion": 59,
+  "nativeVersion": "1.6.0",
+  "downloadAndroidUrl": "https://storage.com/production/index.android.bundle.zip",
+  "downloadIosUrl": "https://storage.com/production/main.jsbundle.zip",
+}
+```
+
+이렇게 적용된 전략은 다음과 같은 프로세스로 앱이 진행됩니다.
+
+![Inapp Update process](assets/img/writing/14/inapp_update_process.png){: width="640" }
+_인앱 업데이트 프로세스_
+
+### 4-2. 버전 관리 자동화
+
+이러한 버전은 외부 저장소를 통해 관리되는데, 외부 저장소에 버전 정보를 수동으로 업데이트하는 과정은 휴먼 에러를 유발할 수 있어 다음과 같이 워크플로우를 구성하였습니다.
+
+![App Workflow](assets/img/writing/14/app_workflow.png){: width="640" }
+_버전 관리를 위한 자동화 파이프라인 워크플로우_
+
+워크플로우는 prod/staging 환경에 따른 버전 관리 워크플로우를 나타내고 있으며, 기본적인 흐름은 다음과 같습니다.
+
+1. 테스트 단계
+2. (`on: pull_request: release-**`) 코드 변경 감지
+  - 네이티브 코드 변경 시: Staging 환경에 Android/iOS 배포
+  - JS 코드 변경 시: 외부 저장소에 Staging 환경의 버전 정보 및 번들 업데이트
+3. (`on: pull_request: main`) 프로덕션 배포
+  - 최신 버전 유지를 위해 Android/iOS를 앱 스토어에 배포
+4. (`on: push: main`) 프로덕션 버전 정보 및 번들 업데이트
+
+> 버전 관리 워크플로우는 아래 Gist를 참고해주세요!
+>
+> [https://gist.github.com/BangDori/d8ce7347e3b1e5d25ffade8ff51f4b62](https://gist.github.com/BangDori/d8ce7347e3b1e5d25ffade8ff51f4b62)
+
+이러한 워크플로우를 통해 외부 저장소에 기록된 버전 정보를 수동으로 업데이트하는 과정에서 발생할 수 있는 실수를 방지하여 안정성을 높일 수 있게 되었습니다.
