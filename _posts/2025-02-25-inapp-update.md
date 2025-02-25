@@ -174,7 +174,7 @@ _타임라인에 따른 앱 설치_
 
 - 네이티브 코드와 JS 번들 버전을 분리하여 관리하는 **버전 관리 전략을 수립**하고,
 - **자동화된 CI/CD 파이프라인을 구축하여 휴먼 에러를 줄이고 배포 일관성을 유지**하는 방식을 적용했습니다.
-
+ 
 그러나 아직 해결해야 할 문제점들이 남아 있습니다.
 
 1. 신규 사용자의 번들 초기화 문제 (현재 임시방편으로 처리)
@@ -192,3 +192,9 @@ _타임라인에 따른 앱 설치_
 > 2. 특정 버전 사용자에게만 핫픽스를 제공하는 방법
 > 3. 점진적 업데이트(Gradual Rollout) 기법을 통해 앱 이슈 최소화하기
 {: .prompt-info }
+
+## 참고
+
+- [Over-The-Air updates with CodePush - The Warm Up | React Native Heroes 2023](https://www.youtube.com/watch?v=XXe_o3wu-n4)
+- [앱 버전 관리, 어떻게 하는게 좋을까?](https://honeystorage.tistory.com/310)
+- [react-native-ota-hot-update](https://github.com/vantuan88291/react-native-ota-hot-update)
