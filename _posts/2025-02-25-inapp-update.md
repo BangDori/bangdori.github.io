@@ -16,7 +16,7 @@ sitemap:
 > 3. React Native HotUpdate가 인앱 업데이트를 하는 방법
 > 4. 버전 관리 전략과 자동화 파이프라인 구축
 > 5. 결론
-{: .prompt-info }
+{: .prompt-tip }
 
 ## 1. 개요
 
