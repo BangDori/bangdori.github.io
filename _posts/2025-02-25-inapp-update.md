@@ -195,6 +195,6 @@ _타임라인에 따른 앱 설치_
 
 ## 참고
 
-- [Over-The-Air updates with CodePush - The Warm Up | React Native Heroes 2023](https://www.youtube.com/watch?v=XXe_o3wu-n4)
+- [Over-The-Air updates with CodePush - The Warm Up (React Native Heroes 2023)](https://www.youtube.com/watch?v=XXe_o3wu-n4)
 - [앱 버전 관리, 어떻게 하는게 좋을까?](https://honeystorage.tistory.com/310)
 - [react-native-ota-hot-update](https://github.com/vantuan88291/react-native-ota-hot-update)
