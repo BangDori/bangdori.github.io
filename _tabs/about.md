@@ -20,5 +20,6 @@ order: 4
 
 ### OpenSource
 
-- react-native-ota-hot-update ([#57](https://github.com/vantuan88291/react-native-ota-hot-update/pull/57))
+- react-native-kakao ([#52](https://github.com/mym0404/react-native-kakao/pull/52))
+- react-native-ota-hot-update ([#57](https://github.com/vantuan88291/react-native-ota-hot-update/pull/57), [#60](https://github.com/vantuan88291/react-native-ota-hot-update/pull/60))
 - react-iphone-layout ([npm](https://www.npmjs.com/package/react-iphone-layout))
