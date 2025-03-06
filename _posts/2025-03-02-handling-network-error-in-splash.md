@@ -1,6 +1,6 @@
 ---
 title: 네트워크 에러에도 끊김 없는 스플래시 화면 설계하기
-date: 2025-03-02 00:48:00 +/-TTTT
+date: 2025-03-06 09:18:00 +/-TTTT
 categories: [Frontend, React Native]
 tags: [react native, splash screen, network error, error handling, retry mechanism, error boundary, tanstack query, ux improvement]
 sitemap:
@@ -12,6 +12,7 @@ sitemap:
 > 1. 개요
 > 2. 문제 인식
 > 3. 문제 접근
+> 4. 테스트 시나리오 설계
 {: .prompt-tip }
 
 ## 1. 개요
@@ -127,26 +128,210 @@ _네 번째 대안_
 | \            | 2️⃣ Queue 방식 | 3️⃣ Retry & ErrorBoundary | 4️⃣ Network Check and Retry |
 |---------------------------|---------------|---------------------------|------------------------------|
 | **N/S 대응**  | ❌ Queue의 복잡한 예외 처리 문제 | ➖ 재시도 및 UI를 제공하지만 무한 루프 위험 | ✅ 점진적 Retry + 네트워크 확인 |
-| **안정성**     | ➖ `5xx`에 대한 대응이 어려움  | ❌ 무한 루프 위험 | ✅ `Retry` 초과 시 네트워크 확인 후 재시도 |
+| **안정성**     | ➖ `5xx`에 대한 대응이 어려움  | ❌ 무한 루프 위험 | ✅ Retry 초과 시 네트워크 확인 후 재시도 |
 | **확장성**     | ❌ Queue 관리의 부담 | ➖ API별로 ErrorBoundary 처리가 필요하지만 확장 가능 | ✅ Queue/ErrorBoundary 없이 N/S 대응이 가능하기에 유지보수가 용이하며 확장성 고려 가능 |
-| **구현 난이도** | ❌ Queue 관리 및 Server 복구 처리 | ➖ Retry + ErrorBoundary | ✅ Retry 정책 |
 
 비교 결과, N/S 대응이 가능하며 안정성과 확장성 측면에서 강점을 가진 대안 4가 가장 적합하다고 판단하였습니다.
 
-## 4. 테스트 시나리오 설계와 구현
+## 4. 테스트 시나리오 설계
 
-우선, 우리가 해결해야 할 문제를 테스트 코드로 검증해보자. Jest와 @testing-library/react를 활용하여 다음과 같은 시나리오를 테스트할 것이다.
+TDD(Test-Driven Development) 방식이 항상 최선의 선택은 아니지만, 스플래시 화면과 같이 **잘못된 시나리오가 적용되면 치명적인 문제가 발생할 수 있는 경우**에는 테스트 시나리오를 먼저 설계하는 것이 중요합니다.  
 
-네트워크 장애 발생 시, refreshToken이 정상적으로 유지되는가?
+이 섹션에서는 앞서 개선된 플로우를 안전하게 적용하기 위해 **테스트 케이스를 설계하는 과정**과 주요 고려 사항을 다룹니다.
 
-API 요청이 실패할 경우, 재시도(retry) 로직이 정상적으로 동작하는가?
+> 해당 섹션에서는 많은 테스트 코드가 포함되어 있습니다.
+> 코드 예시가 많으므로, 가독성을 위해 필요한 경우에만 코드를 확인하는 것을 권장합니다.
+{: .prompt-warning }
 
-일정 횟수 이상 재시도해도 실패하면 로그아웃 처리되는가?
+<br />
 
-이제, 이러한 조건을 테스트 코드로 작성해보자.
+테스트는 [Jest](https://jestjs.io/) + [React Testing Library](https://testing-library.com/docs/)를 이용하여 진행하고, 필요한 api는 모킹하여 진행합니다.
 
+### 4-1. 초기 로딩 테스트
+
+1. 앱 실행 후 Splash 화면이 렌더링된다.
+
+```tsx
+import { render, screen } from "@testing-library/react";
+import App from "../App"; // 실제 컴포넌트 경로
+
+describe("초기 로딩", () => {
+  it("Splash 화면이 렌더링된다.", () => {
+    render(<App />);
+    expect(screen.getByText("Splash")).toBeInTheDocument();
+  });
+});
 ```
-테스트코드들!
+
+### 4-2. Refresh API Call 테스트
+
+1. 성공하면 User API Call이 정상적으로 호출된다.
+2. 네트워크 장애(offline)일 경우 3회 Retry 후 Connection Error 페이지로 이동한다.
+3. 서버 에러(5xx)일 경우 3회 Retry 후 Connection Error 페이지로 이동한다.
+4. 클라이언트 에러(4xx)일 경우 Retry 없이 로그인 페이지로 이동한다.
+
+```tsx
+describe("Refresh API Call", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  const triggerAllTimers = async (times) => {
+    for (let i = 0; i < times; i++) {
+      jest.advanceTimersByTime(Math.pow(2, i) * 1000); // 1 → 2 → 4
+      await waitFor(() => {});
+    }
+  };
+
+  it("성공하면 User API Call이 정상적으로 호출된다.", async () => {
+    api.refreshToken.mockResolvedValue({ success: true });
+    api.getUserInfo.mockResolvedValue({ success: true });
+
+    render(<App />);
+
+    await waitFor(() => expect(api.refreshToken).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(api.getUserInfo).toHaveBeenCalledTimes(1));
+  });
+
+  it("네트워크 장애(offline)일 경우 3회 Retry 후 Connection Error 페이지로 이동한다.", async () => {
+    api.refreshToken.mockRejectedValue(new Error("Network Error"));
+
+    render(<App />);
+
+    await triggerAllTimers(3);
+
+    await waitFor(() => expect(screen.getByText("Connection Error 페이지")).toBeInTheDocument());
+    expect(api.refreshToken).toHaveBeenCalledTimes(3);
+  });
+
+  it("서버 에러(5xx)일 경우 3회 Retry 후 Connection Error 페이지로 이동한다.", async () => {
+    api.refreshToken.mockRejectedValue({ response: { status: 500 } });
+
+    render(<App />);
+
+    await triggerAllTimers(3);
+
+    await waitFor(() => expect(screen.getByText("Connection Error 페이지")).toBeInTheDocument());
+    expect(api.refreshToken).toHaveBeenCalledTimes(3);
+  });
+
+  it("클라이언트 에러(4xx)일 경우 Retry 없이 로그인 페이지로 이동한다.", async () => {
+    api.refreshToken.mockRejectedValue({ response: { status: 401 } });
+
+    render(<App />);
+
+    await waitFor(() => expect(screen.getByText("로그인 페이지")).toBeInTheDocument());
+    expect(api.refreshToken).toHaveBeenCalledTimes(1);
+  });
+});
 ```
 
-## 6. 잠깐 UX 개선은!?
+### 4-3. User API Call 테스트
+
+1. 성공한 후, Splash가 종료되면 홈 화면이 렌더링된다.
+2. 네트워크 장애(offline)일 경우 3회 Retry 후 Connection Error 페이지로 이동한다.
+3. 서버 에러(5xx)일 경우 3회 Retry 후 Connection Error 페이지로 이동한다.
+4. 클라이언트 에러(4xx)일 경우 Retry 없이 로그인 페이지로 이동한다.
+
+```tsx
+describe("User API Call", () => {
+  it("성공한 후, Splash가 종료되면 홈 화면이 렌더링된다.", async () => {
+    api.refreshToken.mockResolvedValue({ success: true });
+    api.getUserInfo.mockResolvedValue({ success: true });
+
+    render(<App />);
+
+    await waitFor(() => expect(screen.getByText("Home Page")).toBeInTheDocument());
+  });
+
+  it("네트워크 장애(offline)일 경우 3회 Retry 후 Connection Error 페이지로 이동한다.", async () => {
+    api.getUserInfo.mockRejectedValue(new Error("Network Error"));
+
+    render(<App />);
+
+    await triggerAllTimers(3);
+
+    await waitFor(() => expect(screen.getByText("Connection Error 페이지")).toBeInTheDocument());
+    expect(api.getUserInfo).toHaveBeenCalledTimes(3);
+  });
+
+  it("서버 에러(5xx)일 경우 3회 Retry 후 Connection Error 페이지로 이동한다.", async () => {
+    api.getUserInfo.mockRejectedValue({ response: { status: 500 } });
+
+    render(<App />);
+
+    await triggerAllTimers(3);
+
+    await waitFor(() => expect(screen.getByText("Connection Error 페이지")).toBeInTheDocument());
+    expect(api.getUserInfo).toHaveBeenCalledTimes(3);
+  });
+
+  it("클라이언트 에러(4xx)일 경우 Retry 없이 로그인 페이지로 이동한다.", async () => {
+    api.getUserInfo.mockRejectedValue({ response: { status: 403 } });
+
+    render(<App />);
+
+    await waitFor(() => expect(screen.getByText("로그인 페이지")).toBeInTheDocument());
+    expect(api.getUserInfo).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+### 4-4. 최종 페이지 이동 테스트
+
+1. 네트워크가 원활하지 않을 경우, Connection Error 페이지로 이동한다.
+2. Refresh API Call과 User API Call이 모두 성공하면, 홈 페이지로 이동한다.
+3. RTK가 존재하지 않을 경우 로그인 페이지로 이동한다.
+
+```tsx
+describe("최종 페이지 이동", () => {
+  it("네트워크가 원활하지 않을 경우, Connection Error 페이지로 이동한다.", async () => {
+    api.isConnectedNetwork.mockResolvedValue(false);
+
+    render(<App />);
+
+    await waitFor(() => expect(screen.getByText("Connection Error 페이지")).toBeInTheDocument());
+  });
+
+  it("Refresh API Call과 User API Call이 모두 성공하면 홈 페이지로 이동한다.", async () => {
+    api.refreshToken.mockResolvedValue({ success: true });
+    api.getUserInfo.mockResolvedValue({ success: true });
+
+    render(<App />);
+
+    await waitFor(() => expect(screen.getByText("Home Page")).toBeInTheDocument());
+  });
+
+  it("RTK가 존재하지 않을 경우 로그인 페이지로 이동한다.", async () => {
+    api.getUserInfo.mockResolvedValue(null);
+
+    render(<App />);
+
+    await waitFor(() => expect(screen.getByText("로그인 페이지")).toBeInTheDocument());
+  });
+});
+```
+
+### 4-5. 고려해야 할 점
+
+단위 테스트만으로는 모든 시나리오를 완벽하게 점검하기 어려운 한계가 있습니다.
+특히, 아래와 같은 상황에서는 추가적인 테스트 방법이 필요할 수 있습니다.
+
+#### 📌 네트워크 환경의 다양한 변동성 테스트
+
+단위 테스트에서는 `mock`을 사용하여 네트워크 장애 및 응답에 대한 최소한의 시뮬레이션을 진행하지만, 실제 네트워크 환경에서 발생할 수 있는 변동성을 완전히 반영하기는 어렵습니다.
+
+E2E 테스트를 수행하는 것 또한 하나의 방법이 될 수 있지만, 너무 많은 자동화 테스트는 오히려 개발 속도를 저하시킬 수 있으며, 실전에서의 예외적인 상황을 모두 반영하기 어렵다고 판단하였습니다.
+
+따라서, 아래와 같이 중요한 핵심 흐름은 팀원들 간의 실사용 테스트를 통해 진행하도록 결정하였습니다.
+
+1. 실제 기기에서 네트워크가 변동되는 상황(예: Wi-Fi ↔ LTE 전환, VPN 사용)을 테스트
+2. 앱을 실행한 상태에서 백그라운드 전환 및 복귀 시 정상 동작 여부 확인
+3. 예상치 못한 시나리오(예: 화면을 빠르게 여러 번 전환하는 경우)
+4. 네트워크를 연결하지 않고 앱 실행 시 Connection Error가 나타나는지
+5. Connection Error 페이지에서 네트워크 연결 후 재시도하면 정상적으로 로그인되는지
