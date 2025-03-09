@@ -3,6 +3,8 @@ title: 네트워크 에러에도 끊김 없는 스플래시 화면 설계하기
 date: 2025-03-10 01:36:00 +/-TTTT
 categories: [Frontend, React Native]
 tags: [react native, splash screen, network error, error handling, retry mechanism, error boundary, tanstack query, ux improvement]
+image:
+  path: assets/img/writing/15/sentry_issue.png
 sitemap:
   changefreq: daily
   priority: 0.5
