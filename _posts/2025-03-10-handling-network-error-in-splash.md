@@ -315,7 +315,6 @@ describe('RootNavigator 화면 이동 테스트', () => {
 
   it('인증 성공 시 홈 화면이 렌더링된다.', () => {
     (useAuth as jest.Mock).mockReturnValue({
-      isFirstLoggedIn: false,
       isLoggedIn: true,
       isAuthFinished: true,
       isNSError: false,
