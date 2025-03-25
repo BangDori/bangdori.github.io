@@ -193,6 +193,8 @@ _타임라인에 따른 앱 설치_
 > 3. 점진적 업데이트(Gradual Rollout) 기법을 통해 앱 이슈 최소화하기
 {: .prompt-info }
 
+> 이 글의 다음 내용이 궁금하시다면, [체크박스 하나로 인앱 업데이트 제어하기 (with 이전 문제를 해결하며)](https://bangdori.kr/posts/inapp-update-2)를 확인해보세요!
+
 ## 참고
 
 - [Over-The-Air updates with CodePush - The Warm Up (React Native Heroes 2023)](https://www.youtube.com/watch?v=XXe_o3wu-n4)

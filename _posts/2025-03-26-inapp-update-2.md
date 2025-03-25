@@ -1,8 +1,8 @@
 ---
-title: In-App Updates의 버전을 관리해보자
+title: 체크박스 하나로 인앱 업데이트 제어하기 (with 이전 문제를 해결하며)
 date: 2025-03-24 12:58:00 +/-TTTT
 categories: [Frontend, React Native]
-tags: [code push, aws s3, In-app updates, hot update]
+tags: [react native, in-app updates, github actions, ota update, 버전 관리, 배포 자동화, s3, mobile release, workflow]
 image:
   path: assets/img/thumbnail/inapp_update_thumbnail.png
 sitemap:
@@ -14,6 +14,7 @@ sitemap:
 > 1. 개요
 > 2. 인앱 업데이트 서비스에 맞게 적용하기
 > 3. 버전 관리 플로우 효율적으로 개선하기
+> 4. 결론
 {: .prompt-tip }
 
 ## 1. 개요
@@ -56,7 +57,7 @@ sitemap:
 
 이에 따라, 이번 개선에서는 "<span style="color: #00CA5B;">신규 사용자의 번들 초기화 문제</span>"에 먼저 집중하게 되었습니다.
 
-### 2-1. 외부 버전 정보와 설치된 앱 버전의 정합성 맞추기
+### 2-2. 외부 버전 정보와 설치된 앱 버전의 정합성 맞추기
 
 기존에는 외부 스토리지에 버전 정보가 업데이트되는 시점과 앱 제출이 완료되는 시점 사이에, 신규 사용자의 앱 버전이 올바르게 초기화되지 않는 문제가 발생했었습니다. 저는 이 문제를 **"신규 사용자의 번들 초기화 문제"**라고 정의했는데요, 구체적인 상황은 아래와 같습니다.
 
@@ -248,6 +249,7 @@ jobs:
 1차적으로는 네이티브 버전 변경에 단순하게 `android` 폴더와 `ios` 폴더의 해시 값을 확인하여, 변경된 경우 네이티브 버전(마켓 업데이트 필요)이 변경되는 것으로 하였습니다.
 
 ![댓글로 버전 정보 추적하기](assets/img/writing/17/comment_ota_update_version.png){: width="640" }
+_OTA Update 예정 알림_
 
 짜잔! 위와 같이 PR 코멘트를 통해 배포 예정 버전 정보를 자동으로 확인할 수 있게 되었습니다. 덕분에 네이티브의 변경이 발생했는지를 직접 추적하지 않고도, **배포될 앱 버전과 마켓 업데이트 여부를 사전에 명확히 파악할 수 있는 구조**를 만들 수 있었습니다.
 
@@ -328,3 +330,96 @@ jobs:
 
 이를 통해, 불필요한 마켓 업데이트 버전의 증가를 줄일 수 있었고 실제로 네이티브 변경이 필요한 상황에서만 정확하게 감지하고 대응할 수 있는 구조를 갖추게 되었습니다.
 
+### 3-3. 외부 스토리지 업데이트 시점 정하기
+
+현재 플로우에서는 `main` 브랜치에 `push`가 이루어져야만 외부 스토리지의 버전 정보가 업데이트되고 있었습니다. 그러다 보니 기존 사용자에게 변경된 번들을 빠르게 제공할 수 있는 방법이 없었고, 이슈가 발생하더라도 결국 기다리거나 수동 배포에 의존해야만 하는 상황이었습니다.
+
+빠르게 대응하더라도 수동 배포를 거쳐야 한다는 점에서, "이 자동화가 진짜 자동화인가?" 하는 의문도 들었죠.
+
+그래서 저는 이 자동화 과정을 조금 다른 방향으로 바라보기로 했습니다.
+
+> "업데이트는 자동으로 하되, 시점은 내가 정할 수 없을까?"
+
+<span style="color: #00CA5B;">만약 시점을 정할 수 있다면 어떨까요?</span>
+
+![댓글로 버전 정보 추적하기](assets/img/writing/17/toggle_ota_update_pr.png){: width="640" }
+_PR 내부 OTA Update 토글 버튼 (테스트용)_
+
+PR 내부에서 OTA Update를 진행할 수 있는 버튼이 있다면? 업데이트 시점을 정할 수 있지 않을까요?
+
+이 아이디어를 빠르게 구현해내기 위해 `Start OTA Update`이 체크되었을 때, 즉 PR 본문이 수정되었을 때 인앱 업데이트 로직이 동작하도록 `edited` trigger를 활용하였습니다. - [Github pull_request](https://docs.github.com/ko/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#pull_request)
+
+위 아이디어를 실현하기 위해 2개의 워크플로우를 만들었습니다:
+
+1. `Start OTA Update` 체크 여부를 판별하는 워크플로우
+2. 실제 OTA 업데이트를 수행하는 워크플로우 (ex. S3 파일 업데이트)
+
+이 중 1번 워크플로우는 PR 내부에서의 **업데이트 시점 제어**라는 이번 개선의 핵심 역할을 합니다. 반면, 2번 워크플로우는 S3 버전 갱신 등 이미 외부 사례로 많이 알려진 내용이므로 이 글에서는 생략하겠습니다.
+
+따라서 1번 워크플로우의 구조와 로직만 간단히 소개하겠습니다.
+
+#### 🚨 workflows 코드가 길 수 있으니 생략하셔도 좋습니다.
+
+{% raw %}
+```yml
+name: ota-update-check
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - edited
+
+permissions:
+  pull-requests: read
+
+jobs:
+  ota-update-check:
+    runs-on: ubuntu-latest
+    if: github.actor == 'developer'
+    outputs:
+      RUN_OTA_UPDATE: ${{ steps.check_ota.outputs.RUN_OTA_UPDATE }}
+    steps:
+      - name: Get PR Body
+        id: pr_body
+        run: |
+          PR_BODY=$(gh pr view ${{ github.event.pull_request.number }} --json body | jq -r '.body')
+          echo "PR_BODY<<EOF" >> $GITHUB_ENV
+          echo "$PR_BODY" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check if OTA Update Checkbox is Checked
+        id: check_ota
+        run: |
+          if echo "${{ env.PR_BODY }}" | grep -q '\- \[[x]\] Start OTA Update'; then
+            echo "RUN_OTA_UPDATE=true" >> $GITHUB_OUTPUT
+          else
+            echo "RUN_OTA_UPDATE=false" >> $GITHUB_OUTPUT
+          fi
+
+  trigger-ota-update:
+    needs: ota-update-check
+    if: needs.ota-update-check.outputs.RUN_OTA_UPDATE == 'true'
+    uses: ./.github/workflows/ota-update.yml
+    secrets: inherit
+```
+{% endraw %}
+
+우선 체크 여부를 판별하는 워크플로우입니다. 여기서 중요한 포인트가 있는데, `ota-update-check`에 if문이 걸려있는 것을 확인하실 수 있습니다.
+
+이는 배포 권한이 있는 팀원으로 좁혀, 다른 팀원이 리뷰 도중 실수로 체크 버튼을 눌렀을 때 배포되는 것을 방지하기 위함입니다. 워크플로우 전반적인 내용은 현재 PR의 내용을 읽어오고, PR 내용에서 `Start OTA Update`가 체크되어있는지를 확인합니다.
+
+결과적으로, 전체 버전 관리 워크플로우는 다음과 같이 구성되었습니다.
+
+![최종 워크플로우 구조](assets/img/writing/17/final_versioning_workflow.png){: width="720" }
+_최종 개선된 OTA 업데이트 워크플로우_
+
+## 4. 결론
+
+
+## 참고
+
+- [Workflow Trigger](https://docs.github.com/ko/actions/writing-workflows/choosing-when-your-workflow-runs/triggering-a-workflow)
