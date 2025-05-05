@@ -3,6 +3,8 @@ title: 자바스크립트 배열에 대해 알아보자
 date: 2025-05-06 01:51:00 +/-TTTT
 categories: [Frontend, JavaScript]
 tags: [JavaScript Array, Sparse Array, ECMAScript, Frontend Performance, Browser Internals]
+image:
+  path: assets/img/thumbnail/js_array_empty.png
 sitemap:
   changefreq: daily
   priority: 0.5
